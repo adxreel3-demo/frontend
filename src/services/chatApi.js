@@ -1,6 +1,4 @@
 // frontend/src/services/chatApi.js
-require("dotenv").config();
-
 function getSessionId() {
   let sessionId = localStorage.getItem("chat_session_id");
 
@@ -30,4 +28,5 @@ export async function sendChatMessage(campaignId, message) {
 
   return data; // { reply: "AI message" }
 }
+
 
