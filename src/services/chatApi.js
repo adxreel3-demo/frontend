@@ -11,22 +11,28 @@ function getSessionId() {
 }
 
 export async function sendChatMessage(campaignId, message) {
-  const response = await fetch(import.meta.env.VITE_API_URL + "/chat/message", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      session_id: getSessionId(),   // ✅ REQUIRED
-      campaign_id: campaignId,
-      message
-    })
-  });
+  const response = await fetch(
+    `${import.meta.env.VITE_API_URL}/chat/message`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        session_id: getSessionId(),   // required
+        campaign_id: campaignId,
+        message
+      })
+    }
+  );
 
-  // 🔥 IMPORTANT: parse JSON
+  if (!response.ok) {
+    throw new Error("Chat API failed");
+  }
+
   const data = await response.json();
-
   return data; // { reply: "AI message" }
 }
+
 
 
