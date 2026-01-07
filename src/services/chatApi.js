@@ -1,4 +1,5 @@
 // frontend/src/services/chatApi.js
+require("dotenv").config();
 
 function getSessionId() {
   let sessionId = localStorage.getItem("chat_session_id");
@@ -12,7 +13,7 @@ function getSessionId() {
 }
 
 export async function sendChatMessage(campaignId, message) {
-  const response = await fetch("http://localhost:4000/chat/message", {
+  const response = await fetch(import.meta.env.VITE_API_URL + "/chat/message", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -29,3 +30,4 @@ export async function sendChatMessage(campaignId, message) {
 
   return data; // { reply: "AI message" }
 }
+
