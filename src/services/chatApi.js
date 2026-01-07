@@ -11,8 +11,7 @@ function getSessionId() {
 }
 
 export async function sendChatMessage(campaignId, message) {
-  const response = await fetch(
-    `${import.meta.env.VITE_API_URL}/chat/message`},
+  const response = await fetch("https://ai-backend-aafd.onrender.com/chat/message",
     {
       method: "POST",
       headers: {
@@ -33,6 +32,7 @@ export async function sendChatMessage(campaignId, message) {
   const data = await response.json();
   return data; // { reply: "AI message" }
 }
+
 
 
 
