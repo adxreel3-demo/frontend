@@ -1,7 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { sendChatMessage } from "../services/chatApi";
-import Message from "./Message";
-import TypingIndicator from "./TypingIndicator";
+import { speak } from "../utils/speak";
 import "../styles/chat.css";
 
 export default function ChatBubble({
@@ -12,7 +11,7 @@ export default function ChatBubble({
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [typing, setTyping] = useState(false);
-  const [isTalking, setIsTalking] = useState(false); // ✅ moved INSIDE
+  const [isTalking, setIsTalking] = useState(false);
 
   const messagesEndRef = useRef(null);
 
@@ -20,6 +19,7 @@ export default function ChatBubble({
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, typing]);
 
+  // Initial greeting (TEXT ONLY – browser blocks voice on load)
   useEffect(() => {
     setMessages([
       {
@@ -34,76 +34,103 @@ I can help you with price, features, warranty, and offers.
   const sendMessage = async () => {
     if (!input.trim()) return;
 
-    const userInput = input;
-
-    setMessages(prev => [...prev, { text: userInput, isUser: true }]);
+    const userText = input;
     setInput("");
+
+    setMessages(prev => [...prev, { text: userText, isUser: true }]);
     setTyping(true);
-    setIsTalking(true);
 
     try {
-      const res = await sendChatMessage(campaignId, userInput);
+      const res = await sendChatMessage(campaignId, userText);
+
+      setTyping(false);
+      setIsTalking(true);
 
       setMessages(prev => [
         ...prev,
         { text: res.reply, isUser: false }
       ]);
+
+      speak(res.reply, () => {
+        setIsTalking(false);
+      });
+
     } catch (err) {
-      setMessages(prev => [
-        ...prev,
-        { text: "⚠️ Something went wrong.", isUser: false }
-      ]);
-    } finally {
       setTyping(false);
       setIsTalking(false);
+
+      setMessages(prev => [
+        ...prev,
+        { text: "⚠️ Something went wrong. Please try again.", isUser: false }
+      ]);
     }
   };
 
   return (
-    <div className="chat-container">
-      {/* Header */}
-      <div className="chat-header">
+    <div className="page">
+
+      {/* HEADER */}
+      <div className="header">
+        <img src="/caketopper_logo.png" className="logo" />
         <div>
-          <strong>{companyName}</strong>
-          <div className="chat-subtitle">{productName}</div>
+          <h3>{companyName}</h3>
+          <small>{productName}</small>
         </div>
         <span className="verified">✔ Verified</span>
       </div>
 
-      {/* Avatar */}
-      <div className="ai-avatar">
-        <img
-          src={isTalking ? "/AI-talking-avatar.gif" : "/ai_not_talk.png"}
-          alt="AI Avatar"
-        />
-      </div>
+      {/* BANNER */}
+      <img src="/caketopper_banner.jpeg" className="banner" />
 
-      {/* Messages */}
-      <div className="chat-box">
-        <div className="messages">
-          {messages.map((m, i) => (
-            <Message
-              key={i}
-              text={m.text}
-              isUser={m.isUser}
-              aiName={companyName}
-            />
-          ))}
+      {/* MAIN LAYOUT */}
+      <div className="content">
 
-          {typing && <TypingIndicator />}
-          <div ref={messagesEndRef} />
-        </div>
-
-        {/* Input */}
-        <div className="input-bar">
-          <input
-            value={input}
-            onChange={e => setInput(e.target.value)}
-            placeholder="Ask about price, offers..."
-            onKeyDown={e => e.key === "Enter" && sendMessage()}
+        {/* LEFT: PRODUCT VIDEO */}
+        <div className="left">
+          <video
+            src="/Cake_Topper.mp4"
+            className="product-video"
+            autoPlay
+            muted
+            loop
           />
-          <button onClick={sendMessage}>Send</button>
         </div>
+
+        {/* CENTER: AVATAR */}
+        <div className="center avatar-box">
+          <img
+            src={isTalking ? "/AI-talking-avatar.gif" : "/ai_not_talk.png"}
+            className="avatar-img"
+          />
+        </div>
+
+        {/* RIGHT: CHAT */}
+        <div className="right chat-container">
+          <div className="messages">
+            {messages.map((m, i) => (
+              <div
+                key={i}
+                className={`message ${m.isUser ? "user-msg" : "ai-msg"}`}
+              >
+                {m.text}
+              </div>
+            ))}
+
+            {typing && <div className="typing">AI is typing...</div>}
+            <div ref={messagesEndRef} />
+          </div>
+
+          <div className="input-bar">
+            <input
+              value={input}
+              onChange={e => setInput(e.target.value)}
+              placeholder="Ask about price, offers..."
+              onKeyDown={e => e.key === "Enter" && sendMessage()}
+            />
+            <button onClick={sendMessage}>Send</button>
+          </div>
+        </div>
+
       </div>
     </div>
   );
