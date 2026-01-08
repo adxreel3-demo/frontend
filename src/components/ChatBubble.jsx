@@ -12,66 +12,49 @@ export default function ChatBubble({
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [typing, setTyping] = useState(false);
-
-  // ✅ Avatar talking state (MUST be inside component)
   const [isTalking, setIsTalking] = useState(false);
 
-  // 🔹 Auto-scroll reference
   const messagesEndRef = useRef(null);
 
-  // 🔹 Scroll to bottom when messages change
+  // Auto-scroll
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, typing]);
 
-  // 🔹 Initial AI greeting (once)
+  // Initial greeting
   useEffect(() => {
     setMessages([
       {
         text: `👋 Hi! I’m the AI assistant for ${productName} by ${companyName}.
-
 I can help you with price, features, warranty, and offers.
-
 👉 What would you like to know?`,
         isUser: false
       }
     ]);
   }, [companyName, productName]);
 
-  // 🔊 Text-to-Speech with GIF control
-  const speak = (text) => {
-    if (!window.speechSynthesis) return;
-
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = "en-IN";
-    utterance.rate = 0.95;
-    utterance.pitch = 1.1;
-
-    utterance.onstart = () => setIsTalking(true);   // GIF ON
-    utterance.onend = () => setIsTalking(false);    // GIF OFF
-
-    window.speechSynthesis.speak(utterance);
-  };
-
   const sendMessage = async () => {
     if (!input.trim()) return;
 
-    // Add user message
     setMessages(prev => [...prev, { text: input, isUser: true }]);
     const userInput = input;
     setInput("");
     setTyping(true);
+    setIsTalking(false);
 
     try {
       const res = await sendChatMessage(campaignId, userInput);
+
+      // 👇 AI is "talking" now
+      setIsTalking(true);
 
       setMessages(prev => [
         ...prev,
         { text: res.reply, isUser: false }
       ]);
 
-      // 🔥 Speak AI reply
-      speak(res.reply);
+      // stop talking animation after response
+      setTimeout(() => setIsTalking(false), 2000);
 
     } catch (err) {
       setMessages(prev => [
@@ -81,6 +64,7 @@ I can help you with price, features, warranty, and offers.
           isUser: false
         }
       ]);
+      setIsTalking(false);
     } finally {
       setTyping(false);
     }
@@ -88,25 +72,28 @@ I can help you with price, features, warranty, and offers.
 
   return (
     <div className="chat-container">
+      {/* Header */}
+      <div className="chat-header">
+        <div>
+          <strong>{companyName}</strong>
+          <div className="chat-subtitle">{productName}</div>
+        </div>
+        <span className="verified">✔ Verified</span>
+      </div>
 
-      {/* ✅ Avatar Header */}
-      <div className="ai-avatar-header">
+      {/* Avatar */}
+      <div className="ai-avatar">
         <img
           src={
             isTalking
-              ? "/female-avatar-talking.gif"
-              : "/female-avatar-static.png"
+              ? "/AI-talking-avatar.gif"
+              : "/ai_not_talk.png"
           }
-          alt="AI Assistant"
-          className="ai-avatar"
+          alt="AI Avatar"
         />
-        <div className="ai-avatar-text">
-          <strong>{companyName}</strong>
-          <div className="chat-subtitle">AI Sales Assistant</div>
-        </div>
       </div>
 
-      {/* Chat Box */}
+      {/* Messages */}
       <div className="chat-box">
         <div className="messages">
           {messages.map((m, i) => (
@@ -119,8 +106,6 @@ I can help you with price, features, warranty, and offers.
           ))}
 
           {typing && <TypingIndicator />}
-
-          {/* Auto-scroll anchor */}
           <div ref={messagesEndRef} />
         </div>
 
