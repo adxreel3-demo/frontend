@@ -2,73 +2,108 @@ import { useEffect, useState, useRef } from "react";
 import { sendChatMessage } from "../services/chatApi";
 import Message from "./Message";
 import TypingIndicator from "./TypingIndicator";
+import "../styles/chat.css";
 
 export default function ChatBubble({
   campaignId,
   companyName,
-  productName,
-  setIsTalking
+  productName
 }) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [typing, setTyping] = useState(false);
-  const endRef = useRef(null);
+  const [isTalking, setIsTalking] = useState(false); // ✅ moved INSIDE
+
+  const messagesEndRef = useRef(null);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, typing]);
 
   useEffect(() => {
     setMessages([
       {
         text: `👋 Hi! I’m the AI assistant for ${productName} by ${companyName}.
-I can help you with price, features, and offers.
+I can help you with price, features, warranty, and offers.
 👉 What would you like to know?`,
         isUser: false
       }
     ]);
-  }, []);
-
-  useEffect(() => {
-    endRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, typing]);
+  }, [companyName, productName]);
 
   const sendMessage = async () => {
     if (!input.trim()) return;
 
-    setMessages(m => [...m, { text: input, isUser: true }]);
+    const userInput = input;
+
+    setMessages(prev => [...prev, { text: userInput, isUser: true }]);
     setInput("");
     setTyping(true);
-    setIsTalking(true); // 🔥 start talking
+    setIsTalking(true);
 
     try {
-      const res = await sendChatMessage(campaignId, input);
-      setMessages(m => [...m, { text: res.reply, isUser: false }]);
-    } catch {
-      setMessages(m => [
-        ...m,
+      const res = await sendChatMessage(campaignId, userInput);
+
+      setMessages(prev => [
+        ...prev,
+        { text: res.reply, isUser: false }
+      ]);
+    } catch (err) {
+      setMessages(prev => [
+        ...prev,
         { text: "⚠️ Something went wrong.", isUser: false }
       ]);
     } finally {
       setTyping(false);
-      setTimeout(() => setIsTalking(false), 1500); // 🔥 stop talking
+      setIsTalking(false);
     }
   };
 
   return (
     <div className="chat-container">
-      <div className="messages">
-        {messages.map((m, i) => (
-          <Message key={i} {...m} aiName={companyName} />
-        ))}
-        {typing && <TypingIndicator />}
-        <div ref={endRef} />
+      {/* Header */}
+      <div className="chat-header">
+        <div>
+          <strong>{companyName}</strong>
+          <div className="chat-subtitle">{productName}</div>
+        </div>
+        <span className="verified">✔ Verified</span>
       </div>
 
-      <div className="input-bar">
-        <input
-          value={input}
-          onChange={e => setInput(e.target.value)}
-          onKeyDown={e => e.key === "Enter" && sendMessage()}
-          placeholder="Ask about price, offers..."
+      {/* Avatar */}
+      <div className="ai-avatar">
+        <img
+          src={isTalking ? "/AI-talking-avatar.gif" : "/ai_not_talk.png"}
+          alt="AI Avatar"
         />
-        <button onClick={sendMessage}>Send</button>
+      </div>
+
+      {/* Messages */}
+      <div className="chat-box">
+        <div className="messages">
+          {messages.map((m, i) => (
+            <Message
+              key={i}
+              text={m.text}
+              isUser={m.isUser}
+              aiName={companyName}
+            />
+          ))}
+
+          {typing && <TypingIndicator />}
+          <div ref={messagesEndRef} />
+        </div>
+
+        {/* Input */}
+        <div className="input-bar">
+          <input
+            value={input}
+            onChange={e => setInput(e.target.value)}
+            placeholder="Ask about price, offers..."
+            onKeyDown={e => e.key === "Enter" && sendMessage()}
+          />
+          <button onClick={sendMessage}>Send</button>
+        </div>
       </div>
     </div>
   );
