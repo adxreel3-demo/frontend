@@ -153,3 +153,15 @@
 .product-line strong {
   color: #111827;
 }
+.ai-avatar {
+  display: flex;
+  justify-content: center;
+  margin: 12px 0;
+}
+
+.ai-avatar img {
+  width: 120px;
+  height: auto;
+  border-radius: 50%;
+}
+
