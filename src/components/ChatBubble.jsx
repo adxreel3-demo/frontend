@@ -3,6 +3,9 @@ import { sendChatMessage } from "../services/chatApi";
 import Message from "./Message";
 import TypingIndicator from "./TypingIndicator";
 import "../styles/chat.css";
+import talkingGif from "/AI-talking-avatar.gif";
+import silentImg from "/ai_not_talk.png";
+
 
 export default function ChatBubble({
   campaignId,
@@ -123,3 +126,4 @@ I can help you with price, features, warranty, and offers.
     </div>
   );
 }
+
