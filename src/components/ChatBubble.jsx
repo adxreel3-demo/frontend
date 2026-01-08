@@ -13,6 +13,9 @@ export default function ChatBubble({
   const [input, setInput] = useState("");
   const [typing, setTyping] = useState(false);
 
+  // ✅ Avatar talking state (MUST be inside component)
+  const [isTalking, setIsTalking] = useState(false);
+
   // 🔹 Auto-scroll reference
   const messagesEndRef = useRef(null);
 
@@ -35,6 +38,21 @@ I can help you with price, features, warranty, and offers.
     ]);
   }, [companyName, productName]);
 
+  // 🔊 Text-to-Speech with GIF control
+  const speak = (text) => {
+    if (!window.speechSynthesis) return;
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = "en-IN";
+    utterance.rate = 0.95;
+    utterance.pitch = 1.1;
+
+    utterance.onstart = () => setIsTalking(true);   // GIF ON
+    utterance.onend = () => setIsTalking(false);    // GIF OFF
+
+    window.speechSynthesis.speak(utterance);
+  };
+
   const sendMessage = async () => {
     if (!input.trim()) return;
 
@@ -51,6 +69,10 @@ I can help you with price, features, warranty, and offers.
         ...prev,
         { text: res.reply, isUser: false }
       ]);
+
+      // 🔥 Speak AI reply
+      speak(res.reply);
+
     } catch (err) {
       setMessages(prev => [
         ...prev,
@@ -66,16 +88,25 @@ I can help you with price, features, warranty, and offers.
 
   return (
     <div className="chat-container">
-      {/* Header */}
-      <div className="chat-header">
-        <div>
+
+      {/* ✅ Avatar Header */}
+      <div className="ai-avatar-header">
+        <img
+          src={
+            isTalking
+              ? "/female-avatar-talking.gif"
+              : "/female-avatar-static.png"
+          }
+          alt="AI Assistant"
+          className="ai-avatar"
+        />
+        <div className="ai-avatar-text">
           <strong>{companyName}</strong>
-          <div className="chat-subtitle">{productName}</div>
+          <div className="chat-subtitle">AI Sales Assistant</div>
         </div>
-        <span className="verified">✔ Verified</span>
       </div>
 
-      {/* Messages */}
+      {/* Chat Box */}
       <div className="chat-box">
         <div className="messages">
           {messages.map((m, i) => (
@@ -83,7 +114,7 @@ I can help you with price, features, warranty, and offers.
               key={i}
               text={m.text}
               isUser={m.isUser}
-              aiName={companyName}   // ✅ Company name as AI identity
+              aiName={companyName}
             />
           ))}
 
