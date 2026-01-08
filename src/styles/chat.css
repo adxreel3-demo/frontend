@@ -1,85 +1,165 @@
+/* ===============================
+   GLOBAL CONTAINER
+================================ */
 .chat-container {
   height: 100vh;
   display: flex;
   flex-direction: column;
   background: #f4f6f8;
+  font-family: Arial, sans-serif;
 }
 
+/* ===============================
+   HEADER
+================================ */
 .chat-header {
-  padding: 14px;
-  background: #fff;
+  padding: 14px 20px;
+  background: #ffffff;
   border-bottom: 1px solid #e5e7eb;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+}
+
+.chat-header strong {
+  font-size: 16px;
 }
 
 .chat-subtitle {
   font-size: 12px;
   color: #6b7280;
+  margin-top: 2px;
 }
 
 .verified {
-  color: green;
   font-size: 12px;
+  color: #16a34a;
+  font-weight: 600;
 }
 
+/* ===============================
+   AVATAR SECTION
+================================ */
 .ai-avatar {
   display: flex;
   justify-content: center;
-  padding: 10px;
+  padding: 16px 0;
 }
 
 .ai-avatar img {
   width: 140px;
+  height: auto;
   border-radius: 50%;
+  background: #a855f7;
+  padding: 6px;
 }
 
+/* ===============================
+   CHAT BODY
+================================ */
+.chat-box {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* ===============================
+   MESSAGES AREA
+================================ */
 .messages {
   flex: 1;
   overflow-y: auto;
-  padding: 16px;
+  padding: 20px;
 }
 
+/* Message wrapper */
+.message {
+  display: flex;
+  margin-bottom: 14px;
+}
+
+/* AI = LEFT */
+.message.ai {
+  justify-content: flex-start;
+}
+
+/* USER = RIGHT */
+.message.user {
+  justify-content: flex-end;
+}
+
+/* ===============================
+   AI MESSAGE BUBBLE
+================================ */
 .ai-msg {
-  background: #fff;
-  padding: 12px;
-  border-radius: 12px;
-  max-width: 70%;
-  margin-bottom: 10px;
-}
-
-.user-msg {
-  background: #2563eb;
-  color: white;
-  padding: 12px;
-  border-radius: 12px;
+  background: #ffffff;
+  padding: 14px 18px;
+  border-radius: 16px;
   max-width: 60%;
-  margin-left: auto;
-  margin-bottom: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  font-size: 14px;
+  line-height: 1.6;
+  word-break: break-word;
 }
 
+/* ===============================
+   USER MESSAGE BUBBLE
+================================ */
+.user-msg {
+  background: linear-gradient(135deg, #2563eb, #1e40af);
+  color: #ffffff;
+  padding: 14px 18px;
+  border-radius: 16px;
+  max-width: 55%;
+  font-size: 14px;
+  line-height: 1.6;
+  word-break: break-word;
+  box-shadow: 0 6px 18px rgba(37,99,235,0.35);
+}
+
+/* ===============================
+   TYPING INDICATOR
+================================ */
+.typing {
+  font-size: 12px;
+  color: #6b7280;
+  margin-bottom: 8px;
+}
+
+/* ===============================
+   INPUT BAR
+================================ */
 .input-bar {
   display: flex;
+  align-items: center;
   gap: 10px;
-  padding: 14px;
-  background: #fff;
+  padding: 14px 16px;
+  background: #ffffff;
   border-top: 1px solid #e5e7eb;
 }
 
+/* Input field */
 .input-bar input {
   flex: 1;
-  padding: 14px 16px;
+  padding: 14px 18px;
   border-radius: 999px;
   border: 1px solid #d1d5db;
   font-size: 14px;
 }
 
+.input-bar input:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+
+/* Send button */
 .input-bar button {
-  padding: 14px 22px;
+  padding: 14px 24px;
   border-radius: 999px;
   border: none;
   background: linear-gradient(135deg, #2563eb, #1e40af);
-  color: white;
+  color: #ffffff;
   font-weight: 600;
   cursor: pointer;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
@@ -89,10 +169,3 @@
   transform: translateY(-1px);
   box-shadow: 0 6px 18px rgba(37,99,235,0.35);
 }
-
-
-.typing {
-  font-size: 12px;
-  color: #6b7280;
-}
-
