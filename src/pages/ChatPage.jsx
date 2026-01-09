@@ -3,44 +3,41 @@ import ChatBubble from "../components/ChatBubble";
 import Avatar from "../components/Avatar";
 import "../styles/chat.css";
 
-export default function ChatPage() {
+export default function ChatPage({ ad }) {
   const [isTalking, setIsTalking] = useState(false);
 
   return (
-    <div className="page">
+    <div className="chat-container">
 
-      {/* ===== HEADER ===== */}
-      <header className="header">
-        <div className="header-left">
-          <img src="/caketopper_logo.png" className="logo" />
+      {/* ================= HEADER ================= */}
+      <header className="chat-header">
+        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+          <img src={ad.logo} className="logo" />
           <div>
-            <h2>Cake Toppers India</h2>
-            <span className="chat-subtitle">Birthday Cake Toppers</span>
+            <strong>{ad.companyName}</strong>
+            <div className="chat-subtitle">{ad.productName}</div>
           </div>
         </div>
 
-        <div className="header-right">
-          {/* Adxreel AI Assistant */}
+        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
           <div className="adxreel-badge">
             <img src="/logo.png" alt="Adxreel" />
             <span>Adxreel AI Assistant</span>
           </div>
 
-          {/* Verified */}
           <span className="verified">✔ Verified</span>
         </div>
       </header>
 
-      {/* ===== BANNER ===== */}
-      <img src="/caketopper_banner.jpeg" className="banner" />
+      {/* ================= BANNER ================= */}
+      <img src={ad.banner} className="banner" />
 
-      {/* ===== MAIN CONTENT ===== */}
+      {/* ================= CONTENT ================= */}
       <div className="content">
 
-        {/* LEFT – PRODUCT VIDEO */}
         <div className="left">
           <video
-            src="/Cake_Topper.mp4"
+            src={ad.video}
             autoPlay
             muted
             loop
@@ -49,17 +46,15 @@ export default function ChatPage() {
           />
         </div>
 
-        {/* CENTER – AVATAR */}
         <div className="center">
           <Avatar isTalking={isTalking} />
         </div>
 
-        {/* RIGHT – CHAT */}
         <div className="right">
           <ChatBubble
-            campaignId={9101}
-            companyName="Cake Toppers India"
-            productName="Birthday Cake Toppers"
+            campaignId={ad.campaignId}
+            companyName={ad.companyName}
+            productName={ad.productName}
             setIsTalking={setIsTalking}
           />
         </div>
