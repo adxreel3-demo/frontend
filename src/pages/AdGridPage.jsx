@@ -3,22 +3,22 @@ import { ADS } from "../data/ads";
 export default function AdGridPage({ onSelectAd }) {
   return (
     <>
-      {/* ===== AI BRAND BAR ===== */}
+      {/* ===== TOP AI BRAND BAR ===== */}
       <div style={topBar}>
         <div style={brandWrap}>
-          <img src="/logo.png" alt="ADXREEL" style={logoStyle} />
+          <img src="/adxreel.png" alt="Adxreel Logo" style={logoStyle} />
           <div>
-            <div style={brandText}>ADXREEL</div>
+            <div style={brandText}>Adxreel</div>
             <div style={tagline}>AI Advertising Assistant</div>
           </div>
         </div>
       </div>
 
-      {/* ===== AI NOTE ===== */}
+      {/* ===== AI NOTE / INSTRUCTION ===== */}
       <div style={noteBox}>
         🤖 <strong>AI Demo Note:</strong> After selecting an advertisement,
-        the <strong>ADXREEL AI Assistant</strong> will open.  
-        You can ask questions, get instant help, and understand the ad clearly.
+        the <strong> Adxreel AI Assistant </strong> will open.
+        You can ask questions, get help, and understand the ad instantly.
       </div>
 
       {/* ===== AD GRID ===== */}
@@ -44,10 +44,11 @@ export default function AdGridPage({ onSelectAd }) {
               playsInline
               style={videoStyle}
             />
+
             <div style={labelStyle}>
               <strong style={companyStyle}>{ad.companyName}</strong>
               <div style={productStyle}>{ad.productName}</div>
-              <div style={aiHint}>Ask AI about this ad →</div>
+              <div style={aiHint}>Ask Adxreel AI about this ad →</div>
             </div>
           </div>
         ))}
@@ -56,15 +57,16 @@ export default function AdGridPage({ onSelectAd }) {
   );
 }
 
-/* ===== STYLES ===== */
+/* ================= STYLES ================= */
 
 const topBar = {
   position: "sticky",
   top: 0,
   zIndex: 100,
-  background: "linear-gradient(135deg, #0f2027, #203a43, #2c5364)",
-  padding: "16px 28px",
-  color: "#fff"
+  background: "linear-gradient(90deg, #4f8cff, #7b5cff, #ec4899)",
+  padding: "14px 26px",
+  borderRadius: "0 0 18px 18px",
+  boxShadow: "0 10px 30px rgba(79,140,255,0.35)"
 };
 
 const brandWrap = {
@@ -74,29 +76,32 @@ const brandWrap = {
 };
 
 const logoStyle = {
-  height: "38px"
+  height: "36px"
 };
 
 const brandText = {
   fontSize: "22px",
   fontWeight: "700",
-  letterSpacing: "1px"
+  letterSpacing: "0.8px",
+  color: "#ffffff"
 };
 
 const tagline = {
   fontSize: "13px",
-  opacity: 0.85
+  color: "rgba(255,255,255,0.9)"
 };
 
 const noteBox = {
   maxWidth: "1100px",
-  margin: "20px auto",
+  margin: "22px auto",
   padding: "16px 20px",
-  borderRadius: "12px",
-  background: "linear-gradient(135deg, #eef2ff, #f8fafc)",
-  color: "#333",
+  borderRadius: "14px",
+  background:
+    "linear-gradient(135deg, rgba(79,140,255,0.12), rgba(236,72,153,0.12))",
+  color: "#1f2937",
   fontSize: "15px",
-  boxShadow: "0 8px 20px rgba(0,0,0,0.08)"
+  boxShadow: "0 8px 24px rgba(123,92,255,0.15)",
+  border: "1px solid rgba(123,92,255,0.25)"
 };
 
 const gridStyle = {
@@ -122,7 +127,7 @@ const aiGlow = {
   position: "absolute",
   inset: 0,
   background:
-    "linear-gradient(120deg, rgba(0,255,255,0.15), rgba(0,0,0,0))",
+    "linear-gradient(120deg, rgba(79,140,255,0.25), rgba(236,72,153,0.15), transparent)",
   pointerEvents: "none"
 };
 
@@ -135,7 +140,7 @@ const videoStyle = {
 
 const labelStyle = {
   padding: "16px",
-  background: "#fff"
+  background: "#ffffff"
 };
 
 const companyStyle = {
@@ -152,6 +157,8 @@ const productStyle = {
 const aiHint = {
   marginTop: "8px",
   fontSize: "13px",
-  color: "#2563eb",
-  fontWeight: "500"
+  fontWeight: "600",
+  background: "linear-gradient(90deg, #4f8cff, #ec4899)",
+  WebkitBackgroundClip: "text",
+  WebkitTextFillColor: "transparent"
 };
