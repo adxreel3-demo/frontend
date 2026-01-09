@@ -1,24 +1,27 @@
+// Browser Text-to-Speech (female voice if available)
+
 export function speak(text, onEnd) {
-  if (!window.speechSynthesis) return;
+  if (!("speechSynthesis" in window)) return;
 
   const utterance = new SpeechSynthesisUtterance(text);
 
-  const voices = speechSynthesis.getVoices();
-
-  // ✅ FORCE female voice
+  const voices = window.speechSynthesis.getVoices();
   const femaleVoice =
-    voices.find(v => v.name.includes("Google UK English Female")) ||
-    voices.find(v => v.name.includes("Female")) ||
-    voices.find(v => v.lang === "en-IN" && v.name.toLowerCase().includes("female")) ||
-    voices[0];
+    voices.find(v =>
+      v.name.toLowerCase().includes("female") ||
+      v.name.toLowerCase().includes("woman") ||
+      v.lang === "en-IN"
+    ) || voices[0];
 
   utterance.voice = femaleVoice;
-  utterance.pitch = 1.25;   // sweeter
-  utterance.rate = 0.95;
-  utterance.volume = 1;
+  utterance.lang = "en-IN";
+  utterance.rate = 1;
+  utterance.pitch = 1;
 
-  utterance.onend = onEnd;
+  utterance.onend = () => {
+    onEnd && onEnd();
+  };
 
-  speechSynthesis.cancel();
-  speechSynthesis.speak(utterance);
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(utterance);
 }
