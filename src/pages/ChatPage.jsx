@@ -9,18 +9,32 @@ export default function ChatPage() {
   return (
     <div className="page">
 
-      {/* HEADER */}
+      {/* ===== HEADER ===== */}
       <header className="header">
-        <img src="/caketopper_logo.png" className="logo" />
-        <div>
-          <h2>Cake Toppers India</h2>
+        <div className="header-left">
+          <img src="/caketopper_logo.png" className="logo" />
+          <div>
+            <h2>Cake Toppers India</h2>
+            <span className="chat-subtitle">Birthday Cake Toppers</span>
+          </div>
+        </div>
+
+        <div className="header-right">
+          {/* Adxreel AI Assistant */}
+          <div className="adxreel-badge">
+            <img src="/logo.png" alt="Adxreel" />
+            <span>Adxreel AI Assistant</span>
+          </div>
+
+          {/* Verified */}
           <span className="verified">✔ Verified</span>
         </div>
       </header>
 
+      {/* ===== BANNER ===== */}
       <img src="/caketopper_banner.jpeg" className="banner" />
 
-      {/* MAIN CONTENT */}
+      {/* ===== MAIN CONTENT ===== */}
       <div className="content">
 
         {/* LEFT – PRODUCT VIDEO */}
@@ -46,7 +60,7 @@ export default function ChatPage() {
             campaignId={9101}
             companyName="Cake Toppers India"
             productName="Birthday Cake Toppers"
-            setIsTalking={setIsTalking}   // 🔥 important
+            setIsTalking={setIsTalking}
           />
         </div>
 
