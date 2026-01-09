@@ -64,19 +64,29 @@ After you add an ad, I’ll open automatically and help clear all your doubts ab
   return (
     <div className="chat-container">
 
-      {/* ================= HEADER ================= */}
+      {/* ================= HEADER (ONLY UPDATED PART) ================= */}
       <div className="chat-header adx-header">
-        <div className="adx-brand">
-          <img
-            src="/adxreel.png"
-            alt="ADXREEL Logo"
-            className="adx-logo"
-          />
-          <div>
-            <strong>ADXREEL</strong>
-            <div className="chat-subtitle">AI Assistant</div>
+        <div>
+          {/* ADXREEL */}
+          <div className="adx-brand">
+            <img
+              src="/adxreel.png"
+              alt="ADXREEL Logo"
+              className="adx-logo"
+            />
+            <div>
+              <strong>ADXREEL</strong>
+              <div className="chat-subtitle">AI Assistant</div>
+            </div>
+          </div>
+
+          {/* ADVERTISER */}
+          <div style={{ marginTop: "6px" }}>
+            <strong>{companyName}</strong>
+            <div className="chat-subtitle">{productName}</div>
           </div>
         </div>
+
         <span className="verified">✔ Verified</span>
       </div>
 
