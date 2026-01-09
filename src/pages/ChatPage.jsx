@@ -60,24 +60,24 @@ After you add an ad, I’ll open automatically and help clear all your doubts ab
   return (
     <div className="chat-container">
 
-      {/* ================= ADXREEL TOP BAR (FORCED) ================= */}
+      {/* ================= HEADER 1: ADXREEL ================= */}
       <div
         style={{
           position: "sticky",
           top: 0,
-          zIndex: 9999,
+          zIndex: 1000,
           background: "linear-gradient(90deg, #4f8cff, #7b5cff, #ec4899)",
-          padding: "14px 22px",
+          padding: "12px 22px",
           display: "flex",
           alignItems: "center",
           gap: "14px",
-          boxShadow: "0 10px 30px rgba(79,140,255,0.35)"
+          boxShadow: "0 8px 24px rgba(79,140,255,0.35)"
         }}
       >
         <img
           src="/adxreel.png"
           alt="ADXREEL Logo"
-          style={{ height: "36px" }}
+          style={{ height: "34px" }}
         />
         <div>
           <div style={{ fontSize: "20px", fontWeight: 700, color: "#fff" }}>
@@ -89,7 +89,7 @@ After you add an ad, I’ll open automatically and help clear all your doubts ab
         </div>
       </div>
 
-      {/* ================= CHAT HEADER (ADVERTISER) ================= */}
+      {/* ================= HEADER 2: COMPANY ================= */}
       <div className="chat-header">
         <div>
           <strong>{companyName}</strong>
