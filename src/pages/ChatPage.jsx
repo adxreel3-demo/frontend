@@ -60,24 +60,26 @@ After you add an ad, I’ll open automatically and help clear all your doubts ab
   return (
     <div className="chat-container">
 
-      {/* ================= HEADER 1: ADXREEL ================= */}
+      {/* ================= FORCE ADXREEL HEADER (ALWAYS VISIBLE) ================= */}
       <div
         style={{
-          position: "sticky",
+          position: "fixed",
           top: 0,
-          zIndex: 1000,
+          left: 0,
+          right: 0,
+          zIndex: 999999,
           background: "linear-gradient(90deg, #4f8cff, #7b5cff, #ec4899)",
-          padding: "12px 22px",
+          padding: "14px 22px",
           display: "flex",
           alignItems: "center",
           gap: "14px",
-          boxShadow: "0 8px 24px rgba(79,140,255,0.35)"
+          boxShadow: "0 6px 20px rgba(0,0,0,0.25)"
         }}
       >
         <img
           src="/adxreel.png"
           alt="ADXREEL Logo"
-          style={{ height: "34px" }}
+          style={{ height: "36px" }}
         />
         <div>
           <div style={{ fontSize: "20px", fontWeight: 700, color: "#fff" }}>
@@ -89,8 +91,8 @@ After you add an ad, I’ll open automatically and help clear all your doubts ab
         </div>
       </div>
 
-      {/* ================= HEADER 2: COMPANY ================= */}
-      <div className="chat-header">
+      {/* ================= COMPANY HEADER ================= */}
+      <div className="chat-header" style={{ marginTop: "80px" }}>
         <div>
           <strong>{companyName}</strong>
           <div className="chat-subtitle">{productName}</div>
