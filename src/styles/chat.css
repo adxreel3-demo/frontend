@@ -171,4 +171,52 @@
   font-size: 12px;
   color: #6b7280;
 }
+/* ================= HEADER LAYOUT ================= */
+.header {
+  padding: 14px 18px;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo {
+  height: 40px;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ================= ADXREEL BADGE ================= */
+.adxreel-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  background: linear-gradient(
+    90deg,
+    rgba(79,140,255,0.15),
+    rgba(236,72,153,0.15)
+  );
+  border: 1px solid rgba(123,92,255,0.4);
+}
+
+.adxreel-badge img {
+  height: 16px;
+}
+
+
 
