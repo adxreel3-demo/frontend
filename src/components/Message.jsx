@@ -1,4 +1,5 @@
 import React from "react";
+import "../styles/chat.css";
 
 /* ---------- Bold Parser ---------- */
 function renderBold(text) {
@@ -72,3 +73,4 @@ export default function Message({ text, isUser, aiName }) {
     </div>
   );
 }
+
