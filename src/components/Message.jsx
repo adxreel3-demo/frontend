@@ -1,5 +1,4 @@
 function renderBold(text) {
-  // Convert **bold** to <strong>
   const parts = text.split(/(\*\*[^*]+\*\*)/g);
 
   return parts.map((part, i) => {
@@ -19,19 +18,26 @@ export default function Message({ text, isUser, aiName }) {
     );
   }
 
-  // Detect product-style message
+  // ✅ Robust product detection
   const isProductMessage =
-    text.includes("Price:") && text.includes("Description:");
+    text.includes("**Price:**") && text.includes("**Description:**");
 
   if (isProductMessage) {
-    const blocks = text.split(/\n\d+\)/).filter(Boolean);
+    // ✅ Split by product index (1), 2), 3) — even without newline
+    const blocks = text
+      .split(/\d+\)\s*/)
+      .filter(b => b.trim().length > 0);
 
     return (
       <div className="message ai-msg">
         <div className="ai-label">🤖 {aiName}</div>
 
         {blocks.map((block, index) => {
-          const lines = block.split("\n").filter(Boolean);
+          const lines = block
+            .split("\n")
+            .map(l => l.trim())
+            .filter(Boolean);
+
           return (
             <div key={index} className="product-card">
               {lines.map((line, i) => (
@@ -46,7 +52,7 @@ export default function Message({ text, isUser, aiName }) {
     );
   }
 
-  // Normal AI message
+  // ✅ Normal AI message
   return (
     <div className="message ai-msg">
       <div className="ai-label">🤖 {aiName}</div>
