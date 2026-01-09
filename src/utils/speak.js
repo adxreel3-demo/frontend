@@ -1,18 +1,25 @@
-export function getZiraVoice() {
+export function speakWithZiraSweet(text) {
+  if (!window.speechSynthesis || !text) return;
+
   const voices = window.speechSynthesis.getVoices();
+  const zira =
+    voices.find(v => v.name.toLowerCase().includes("zira")) ||
+    voices.find(v => v.lang.startsWith("en"));
 
-  // Try Microsoft Zira first
-  let voice = voices.find(v =>
-    v.name.toLowerCase().includes("zira")
-  );
+  const cleanedText = text
+    .replace(/\*\*/g, "")
+    .replace(/\n+/g, ". ")     // smoother flow
+    .replace(/₹/g, "rupees "); // sounds nicer
 
-  // Fallbacks (important for demo safety)
-  if (!voice) {
-    voice = voices.find(v =>
-      v.name.toLowerCase().includes("female") &&
-      v.lang.startsWith("en")
-    );
-  }
+  const utterance = new SpeechSynthesisUtterance(cleanedText);
 
-  return voice || voices[0];
+  utterance.voice = zira;
+
+  // 🔥 SWEET SALES TUNING (MAX SAFE LIMITS)
+  utterance.rate = 0.82;      // slower = calmer
+  utterance.pitch = 1.25;     // higher = sweeter
+  utterance.volume = 1;
+
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(utterance);
 }
