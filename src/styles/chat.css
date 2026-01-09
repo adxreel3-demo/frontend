@@ -1,17 +1,21 @@
-/* ===============================
-   GLOBAL CONTAINER
-================================ */
+/* ================= GLOBAL ================= */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, Arial, sans-serif;
+}
+
 .chat-container {
   height: 100vh;
   display: flex;
   flex-direction: column;
   background: #f4f6f8;
-  font-family: Arial, sans-serif;
 }
 
-/* ===============================
-   HEADER
-================================ */
+/* ================= HEADER ================= */
 .chat-header {
   padding: 14px 20px;
   background: #ffffff;
@@ -34,12 +38,9 @@
 .verified {
   font-size: 12px;
   color: #16a34a;
-  font-weight: 600;
 }
 
-/* ===============================
-   AVATAR SECTION
-================================ */
+/* ================= AVATAR ================= */
 .ai-avatar {
   display: flex;
   justify-content: center;
@@ -48,15 +49,13 @@
 
 .ai-avatar img {
   width: 140px;
-  height: auto;
+  height: 140px;
   border-radius: 50%;
   background: #a855f7;
   padding: 6px;
 }
 
-/* ===============================
-   CHAT BODY
-================================ */
+/* ================= CHAT BODY ================= */
 .chat-box {
   flex: 1;
   display: flex;
@@ -64,82 +63,88 @@
   min-height: 0;
 }
 
-/* ===============================
-   MESSAGES AREA
-================================ */
+/* ================= MESSAGES ================= */
 .messages {
   flex: 1;
   overflow-y: auto;
   padding: 20px;
 }
 
-/* Message wrapper */
 .message {
-  display: flex;
   margin-bottom: 14px;
+  display: flex;
+  flex-direction: column;
 }
 
-/* AI = LEFT */
-.message.ai {
-  justify-content: flex-start;
-}
-
-/* USER = RIGHT */
-.message.user {
-  justify-content: flex-end;
-}
-
-/* ===============================
-   AI MESSAGE BUBBLE
-================================ */
+/* ===== AI MESSAGE ===== */
 .ai-msg {
   background: #ffffff;
-  padding: 14px 18px;
+  padding: 14px 16px;
   border-radius: 16px;
-  max-width: 60%;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-  font-size: 14px;
-  line-height: 1.6;
-  word-break: break-word;
+  max-width: 70%;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.06);
 }
 
-/* ===============================
-   USER MESSAGE BUBBLE
-================================ */
-.user-msg {
-  background: linear-gradient(135deg, #2563eb, #1e40af);
-  color: #ffffff;
-  padding: 14px 18px;
-  border-radius: 16px;
-  max-width: 55%;
-  font-size: 14px;
-  line-height: 1.6;
-  word-break: break-word;
-  box-shadow: 0 6px 18px rgba(37,99,235,0.35);
-}
-
-/* ===============================
-   TYPING INDICATOR
-================================ */
-.typing {
+.ai-label {
   font-size: 12px;
   color: #6b7280;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
-/* ===============================
-   INPUT BAR
-================================ */
+.message-text {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #111827;
+}
+
+/* ===== USER MESSAGE ===== */
+.user-msg {
+  background: linear-gradient(135deg, #2563eb, #1e40af);
+  color: white;
+  padding: 14px 18px;
+  border-radius: 18px;
+  max-width: 60%;
+  margin-left: auto;
+  box-shadow: 0 6px 18px rgba(37,99,235,0.35);
+  word-break: break-word;
+}
+
+/* ================= PRODUCT CARDS ================= */
+.product-card {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 14px;
+  margin-top: 10px;
+}
+
+.product-title {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.product-price {
+  color: #2563eb;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.product-desc {
+  font-size: 14px;
+  color: #374151;
+  line-height: 1.5;
+}
+
+/* ================= INPUT BAR ================= */
 .input-bar {
   display: flex;
-  align-items: center;
   gap: 10px;
   padding: 14px 16px;
   background: #ffffff;
   border-top: 1px solid #e5e7eb;
 }
 
-/* Input field */
 .input-bar input {
   flex: 1;
   padding: 14px 18px;
@@ -153,13 +158,13 @@
   border-color: #2563eb;
 }
 
-/* Send button */
 .input-bar button {
-  padding: 14px 24px;
+  padding: 14px 26px;
   border-radius: 999px;
   border: none;
   background: linear-gradient(135deg, #2563eb, #1e40af);
-  color: #ffffff;
+  color: white;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
@@ -170,29 +175,9 @@
   box-shadow: 0 6px 18px rgba(37,99,235,0.35);
 }
 
-.product-card {
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
-  border-radius: 14px;
-  padding: 14px;
-  margin-top: 12px;
-}
-
-.product-line {
-  margin-bottom: 6px;
-  font-size: 14px;
-  line-height: 1.5;
-}
-
-.product-line strong {
-  color: #2563eb;
-  font-weight: 600;
-}
-
-.ai-label {
+/* ================= TYPING ================= */
+.typing {
   font-size: 12px;
   color: #6b7280;
-  margin-bottom: 6px;
+  margin-top: 6px;
 }
-
-
