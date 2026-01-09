@@ -217,9 +217,13 @@
 .adxreel-badge img {
   height: 16px;
 }
+
 .adxreel-logo {
   height: 18px;
+  width: auto;
+  display: inline-block;
 }
+
 
 
 
