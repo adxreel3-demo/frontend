@@ -1,27 +1,18 @@
-// Browser Text-to-Speech (female voice if available)
-
-export function speak(text, onEnd) {
-  if (!("speechSynthesis" in window)) return;
-
-  const utterance = new SpeechSynthesisUtterance(text);
-
+export function getZiraVoice() {
   const voices = window.speechSynthesis.getVoices();
-  const femaleVoice =
-    voices.find(v =>
-      v.name.toLowerCase().includes("female") ||
-      v.name.toLowerCase().includes("woman") ||
-      v.lang === "en-IN"
-    ) || voices[0];
 
-  utterance.voice = femaleVoice;
-  utterance.lang = "en-IN";
-  utterance.rate = 1;
-  utterance.pitch = 1;
+  // Try Microsoft Zira first
+  let voice = voices.find(v =>
+    v.name.toLowerCase().includes("zira")
+  );
 
-  utterance.onend = () => {
-    onEnd && onEnd();
-  };
+  // Fallbacks (important for demo safety)
+  if (!voice) {
+    voice = voices.find(v =>
+      v.name.toLowerCase().includes("female") &&
+      v.lang.startsWith("en")
+    );
+  }
 
-  window.speechSynthesis.cancel();
-  window.speechSynthesis.speak(utterance);
+  return voice || voices[0];
 }
