@@ -4,10 +4,7 @@ import AdDemoPage from "./pages/AdDemoPage";
 
 function App() {
   useEffect(() => {
-  // Wake backend silently
-  fetch("http://ai-backend-aafd.onrender.com//health").catch(() => {});
-}, []);
-
+  
   const [selectedAd, setSelectedAd] = useState(null);
  
   if (!selectedAd) {
