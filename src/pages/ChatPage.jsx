@@ -1,10 +1,19 @@
 import { useState } from "react";
+import { ADS } from "../data/ads";
 import ChatBubble from "../components/ChatBubble";
 import Avatar from "../components/Avatar";
 import "../styles/chat.css";
 
-export default function ChatPage({ ad }) {
+/**
+ * If ad is NOT passed as prop,
+ * we fallback using campaignId (or first ad)
+ */
+export default function ChatPage({ campaignId }) {
   const [isTalking, setIsTalking] = useState(false);
+
+  // 🔥 Find ad from ADS (clean, no hardcode)
+  const ad =
+    ADS.find((item) => item.campaignId === campaignId) || ADS[0];
 
   return (
     <div className="chat-container">
@@ -12,7 +21,7 @@ export default function ChatPage({ ad }) {
       {/* ================= HEADER ================= */}
       <header className="chat-header">
         <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-          <img src={ad.logo} className="logo" />
+          <img src={ad.logo} className="logo" alt={ad.companyName} />
           <div>
             <strong>{ad.companyName}</strong>
             <div className="chat-subtitle">{ad.productName}</div>
@@ -20,7 +29,7 @@ export default function ChatPage({ ad }) {
         </div>
 
         <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-          {/* 🔥 ADXREEL AI ASSISTANT */}
+          {/* Adxreel AI Assistant */}
           <div className="adxreel-badge">
             <img src="/logo.png" alt="Adxreel" />
             <span>Adxreel AI Assistant</span>
