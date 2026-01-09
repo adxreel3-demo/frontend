@@ -3,8 +3,13 @@ import AdGridPage from "./pages/AdGridPage";
 import AdDemoPage from "./pages/AdDemoPage";
 
 function App() {
-  const [selectedAd, setSelectedAd] = useState(null);
+  useEffect(() => {
+  // Wake backend silently
+  fetch("http://ai-backend-aafd.onrender.com//health").catch(() => {});
+}, []);
 
+  const [selectedAd, setSelectedAd] = useState(null);
+ 
   if (!selectedAd) {
     return <AdGridPage onSelectAd={setSelectedAd} />;
   }
