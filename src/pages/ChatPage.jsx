@@ -20,6 +20,7 @@ export default function ChatPage({ ad }) {
         </div>
 
         <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+          {/* 🔥 ADXREEL AI ASSISTANT */}
           <div className="adxreel-badge">
             <img src="/logo.png" alt="Adxreel" />
             <span>Adxreel AI Assistant</span>
@@ -29,37 +30,19 @@ export default function ChatPage({ ad }) {
         </div>
       </header>
 
-      {/* ================= BANNER ================= */}
-      <img src={ad.banner} className="banner" />
-
-      {/* ================= CONTENT ================= */}
-      <div className="content">
-
-        <div className="left">
-          <video
-            src={ad.video}
-            autoPlay
-            muted
-            loop
-            controls
-            className="product-video"
-          />
-        </div>
-
-        <div className="center">
-          <Avatar isTalking={isTalking} />
-        </div>
-
-        <div className="right">
-          <ChatBubble
-            campaignId={ad.campaignId}
-            companyName={ad.companyName}
-            productName={ad.productName}
-            setIsTalking={setIsTalking}
-          />
-        </div>
-
+      {/* ================= AVATAR ================= */}
+      <div className="ai-avatar">
+        <Avatar isTalking={isTalking} />
       </div>
+
+      {/* ================= CHAT ================= */}
+      <ChatBubble
+        campaignId={ad.campaignId}
+        companyName={ad.companyName}
+        productName={ad.productName}
+        setIsTalking={setIsTalking}
+      />
+
     </div>
   );
 }
