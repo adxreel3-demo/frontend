@@ -1,9 +1,14 @@
 import { useEffect, useState, useRef } from "react";
 import { sendChatMessage } from "../services/chatApi";
-import { speak } from "../utils/speak";   // ✅ USE THIS
+import { speak } from "../utils/speak";
 import "../styles/chat.css";
 
-export default function ChatBubble({ campaignId, companyName, productName }) {
+export default function ChatBubble({
+  campaignId,
+  companyName,
+  productName,
+  logo
+}) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [typing, setTyping] = useState(false);
@@ -32,11 +37,8 @@ I can help you with price, features, and current offers.`,
     if (!input.trim()) return;
 
     const userText = input;
-
-    // 🔇 stop any running voice
     window.speechSynthesis.cancel();
 
-    // user message
     setMessages(prev => [...prev, { text: userText, isUser: true }]);
     setInput("");
     setTyping(true);
@@ -45,23 +47,16 @@ I can help you with price, features, and current offers.`,
       const res = await sendChatMessage(campaignId, userText);
 
       setTyping(false);
-
-      // AI message
       setMessages(prev => [...prev, { text: res.reply, isUser: false }]);
 
-      // 🔊 speak AFTER message render
       setTimeout(() => {
         setIsTalking(true);
-
-        speak(res.reply, () => {
-          setIsTalking(false); // stop avatar after voice
-        });
+        speak(res.reply, () => setIsTalking(false));
       }, 400);
 
     } catch (err) {
       setTyping(false);
       setIsTalking(false);
-
       setMessages(prev => [
         ...prev,
         { text: "⚠️ Something went wrong. Please try again.", isUser: false }
@@ -72,12 +67,29 @@ I can help you with price, features, and current offers.`,
   return (
     <div className="chat-container">
 
-      {/* ===== HEADER ===== */}
+      {/* ===== HEADER WITH LOGO ===== */}
       <div className="chat-header">
-        <div>
-          <strong>{companyName}</strong>
-          <div className="chat-subtitle">{productName}</div>
+        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+          
+          {logo && (
+            <img
+              src={logo}
+              alt={companyName}
+              style={{
+                height: "36px",
+                width: "36px",
+                objectFit: "contain",
+                borderRadius: "6px"
+              }}
+            />
+          )}
+
+          <div>
+            <strong>{companyName}</strong>
+            <div className="chat-subtitle">{productName}</div>
+          </div>
         </div>
+
         <span className="verified">✔ Verified</span>
       </div>
 
@@ -92,10 +104,7 @@ I can help you with price, features, and current offers.`,
       {/* ===== MESSAGES ===== */}
       <div className="messages">
         {messages.map((m, i) => (
-          <div
-            key={i}
-            className={`message-row ${m.isUser ? "user" : "ai"}`}
-          >
+          <div key={i} className={`message-row ${m.isUser ? "user" : "ai"}`}>
             <div className={m.isUser ? "user-msg" : "ai-msg"}>
               {m.text}
             </div>
@@ -103,7 +112,6 @@ I can help you with price, features, and current offers.`,
         ))}
 
         {typing && <div className="typing">AI is typing…</div>}
-
         <div ref={endRef} />
       </div>
 
@@ -113,7 +121,7 @@ I can help you with price, features, and current offers.`,
           value={input}
           onChange={e => {
             setInput(e.target.value);
-            window.speechSynthesis.cancel(); // stop voice while typing
+            window.speechSynthesis.cancel();
           }}
           placeholder="Ask about price, offers..."
           onKeyDown={e => e.key === "Enter" && sendMessage()}
