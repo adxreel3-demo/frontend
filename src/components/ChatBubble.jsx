@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { sendChatMessage } from "../services/chatApi";
-import { speak } from "../utils/speak";   // ✅ USE THIS
+import { speak } from "../utils/speak";   //  USE THIS
 import "../styles/chat.css";
 
 export default function ChatBubble({ campaignId, companyName, productName }) {
@@ -151,3 +151,4 @@ I can help you with price, features, and current offers.`,
     banner: "/caketopper_banner.jpeg"
   }
 ];src/data/ads.js
+
