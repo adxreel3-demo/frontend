@@ -3,8 +3,6 @@ import AdGridPage from "./pages/AdGridPage";
 import AdDemoPage from "./pages/AdDemoPage";
 
 function App() {
-  useEffect(() => {
-  
   const [selectedAd, setSelectedAd] = useState(null);
  
   if (!selectedAd) {
