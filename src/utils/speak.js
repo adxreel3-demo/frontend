@@ -1,25 +1,37 @@
-export function speakWithZiraSweet(text) {
+export function speak(text, onEnd) {
   if (!window.speechSynthesis || !text) return;
 
-  const voices = window.speechSynthesis.getVoices();
-  const zira =
-    voices.find(v => v.name.toLowerCase().includes("zira")) ||
-    voices.find(v => v.lang.startsWith("en"));
+  const synth = window.speechSynthesis;
 
+  // 🔹 Clean text for natural speech
   const cleanedText = text
-    .replace(/\*\*/g, "")
-    .replace(/\n+/g, ". ")     // smoother flow
-    .replace(/₹/g, "rupees "); // sounds nicer
+    .replace(/\*\*/g, "")        // remove markdown **
+    .replace(/\n+/g, ". ")       // smooth pauses
+    .replace(/₹/g, "rupees ")    // nicer pronunciation
+    .trim();
 
   const utterance = new SpeechSynthesisUtterance(cleanedText);
 
-  utterance.voice = zira;
+  const voices = synth.getVoices();
 
-  // 🔥 SWEET SALES TUNING (MAX SAFE LIMITS)
-  utterance.rate = 0.82;      // slower = calmer
-  utterance.pitch = 1.25;     // higher = sweeter
+  // 🔹 Prefer Microsoft Zira (sweetest available system voice)
+  utterance.voice =
+    voices.find(v => v.name.toLowerCase().includes("zira")) ||
+    voices.find(v => v.name.toLowerCase().includes("female")) ||
+    voices.find(v => v.lang.startsWith("en")) ||
+    voices[0];
+
+  // 🔥 SALES / SWEET TUNING (MAX SAFE)
+  utterance.rate = 0.82;      // slower, calm
+  utterance.pitch = 1.22;     // sweeter tone
   utterance.volume = 1;
 
-  window.speechSynthesis.cancel();
-  window.speechSynthesis.speak(utterance);
+  // 🔹 Callback when voice ends (for avatar sync)
+  if (onEnd) {
+    utterance.onend = onEnd;
+  }
+
+  // 🔹 Stop previous voice & speak
+  synth.cancel();
+  synth.speak(utterance);
 }
