@@ -1,11 +1,34 @@
 function renderBold(text) {
-  const parts = text.split(/(\*\*[^*]+\*\*)/g);
-
-  return parts.map((part, i) => {
+  return text.split(/(\*\*[^*]+\*\*)/g).map((part, i) => {
     if (part.startsWith("**") && part.endsWith("**")) {
       return <strong key={i}>{part.slice(2, -2)}</strong>;
     }
     return <span key={i}>{part}</span>;
+  });
+}
+
+function parseProducts(text) {
+  // Normalize spacing
+  const cleaned = text.replace(/\s+/g, " ").trim();
+
+  // Split by "1)" "2)" etc
+  const items = cleaned.split(/\d+\)\s*/).filter(Boolean);
+
+  // Must contain Price & Description to qualify
+  if (!cleaned.includes("Price:") || !cleaned.includes("Description:")) {
+    return null;
+  }
+
+  return items.map(item => {
+    const nameMatch = item.match(/\*\*(.*?)\*\*/);
+    const priceMatch = item.match(/Price:\s*₹?[\d,]+/);
+    const descMatch = item.match(/Description:\s*(.*)/);
+
+    return {
+      name: nameMatch?.[1],
+      price: priceMatch?.[0],
+      description: descMatch?.[1]
+    };
   });
 }
 
@@ -18,41 +41,28 @@ export default function Message({ text, isUser, aiName }) {
     );
   }
 
-  // ✅ Robust product detection
-  const isProductMessage =
-    text.includes("**Price:**") && text.includes("**Description:**");
+  const products = parseProducts(text);
 
-  if (isProductMessage) {
-    // ✅ Split by product index (1), 2), 3) — even without newline
-    const blocks = text
-      .split(/\d+\)\s*/)
-      .filter(b => b.trim().length > 0);
-
+  // ✅ PRODUCT CARD MESSAGE
+  if (products) {
     return (
       <div className="message ai-msg">
         <div className="ai-label">🤖 {aiName}</div>
 
-        {blocks.map((block, index) => {
-          const lines = block
-            .split("\n")
-            .map(l => l.trim())
-            .filter(Boolean);
-
-          return (
-            <div key={index} className="product-card">
-              {lines.map((line, i) => (
-                <div key={i} className="product-line">
-                  {renderBold(line)}
-                </div>
-              ))}
-            </div>
-          );
-        })}
+        {products.map((p, i) => (
+          <div key={i} className="product-card">
+            {p.name && <div className="product-title">{p.name}</div>}
+            {p.price && <div className="product-price">{p.price}</div>}
+            {p.description && (
+              <div className="product-desc">{p.description}</div>
+            )}
+          </div>
+        ))}
       </div>
     );
   }
 
-  // ✅ Normal AI message
+  // ✅ NORMAL AI MESSAGE
   return (
     <div className="message ai-msg">
       <div className="ai-label">🤖 {aiName}</div>
