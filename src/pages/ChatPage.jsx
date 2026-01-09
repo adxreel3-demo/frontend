@@ -49,7 +49,7 @@ After you add an ad, I’ll open automatically and help clear all your doubts ab
         speakWithZiraSweet(res.reply, () => {
           setIsTalking(false);
         });
-      }, 400);
+      }, 100);
 
     } catch (err) {
       setTyping(false);
