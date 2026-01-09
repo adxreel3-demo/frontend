@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { sendChatMessage } from "../services/chatApi";
-import { speakWithZiraSweet } from "../utils/speak"; // 🔊 SWEET VOICE
+import { speakWithZiraSweet } from "../utils/speak";
 import "../styles/chat.css";
 
 export default function ChatPage({ campaignId, companyName, productName }) {
@@ -45,9 +45,7 @@ After you add an ad, I’ll open automatically and help clear all your doubts ab
       setMessages(prev => [...prev, { text: res.reply, isUser: false }]);
 
       setIsTalking(true);
-      speakWithZiraSweet(res.reply, () => {
-        setIsTalking(false);
-      });
+      speakWithZiraSweet(res.reply, () => setIsTalking(false));
 
     } catch (err) {
       setTyping(false);
@@ -62,23 +60,41 @@ After you add an ad, I’ll open automatically and help clear all your doubts ab
   return (
     <div className="chat-container">
 
-      {/* ================= HEADER ================= */}
-      <div className="chat-header">
-        <div className="header-left">
-          <div className="adx-brand">
-            <img src="/adxreel.png" alt="ADXREEL Logo" />
-            <div>
-              <div className="adx-title">ADXREEL</div>
-              <div className="adx-subtitle">AI Advertising Assistant</div>
-            </div>
+      {/* ================= ADXREEL TOP BAR (FORCED) ================= */}
+      <div
+        style={{
+          position: "sticky",
+          top: 0,
+          zIndex: 9999,
+          background: "linear-gradient(90deg, #4f8cff, #7b5cff, #ec4899)",
+          padding: "14px 22px",
+          display: "flex",
+          alignItems: "center",
+          gap: "14px",
+          boxShadow: "0 10px 30px rgba(79,140,255,0.35)"
+        }}
+      >
+        <img
+          src="/adxreel.png"
+          alt="ADXREEL Logo"
+          style={{ height: "36px" }}
+        />
+        <div>
+          <div style={{ fontSize: "20px", fontWeight: 700, color: "#fff" }}>
+            ADXREEL
           </div>
-
-          <div className="advertiser">
-            <strong>{companyName}</strong>
-            <div className="chat-subtitle">{productName}</div>
+          <div style={{ fontSize: "13px", color: "rgba(255,255,255,0.9)" }}>
+            AI Advertising Assistant
           </div>
         </div>
+      </div>
 
+      {/* ================= CHAT HEADER (ADVERTISER) ================= */}
+      <div className="chat-header">
+        <div>
+          <strong>{companyName}</strong>
+          <div className="chat-subtitle">{productName}</div>
+        </div>
         <span className="verified">✔ Verified</span>
       </div>
 
@@ -93,7 +109,10 @@ After you add an ad, I’ll open automatically and help clear all your doubts ab
       {/* ================= MESSAGES ================= */}
       <div className="messages">
         {messages.map((m, i) => (
-          <div key={i} className={`message ${m.isUser ? "user-msg" : "ai-msg"}`}>
+          <div
+            key={i}
+            className={`message ${m.isUser ? "user-msg" : "ai-msg"}`}
+          >
             {m.text}
           </div>
         ))}
