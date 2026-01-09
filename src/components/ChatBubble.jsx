@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { sendChatMessage } from "../services/chatApi";
-import { speak } from "../utils/speak";
+import { speakWithZiraSweet } from "../utils/speak"; // 🔊 SWEET VOICE
 import "../styles/chat.css";
 
 export default function ChatBubble({ campaignId, companyName, productName }) {
@@ -8,50 +8,71 @@ export default function ChatBubble({ campaignId, companyName, productName }) {
   const [input, setInput] = useState("");
   const [typing, setTyping] = useState(false);
   const [isTalking, setIsTalking] = useState(false);
+
   const endRef = useRef(null);
 
+  /* ================= INIT MESSAGE ================= */
   useEffect(() => {
     setMessages([
       {
         text: `👋 Hi! I’m the AI assistant for ${productName} by ${companyName}.
-I can help you with price, features, and offers.`,
+I can help you with price, features, and current offers.`,
         isUser: false
       }
     ]);
-  }, []);
+  }, [companyName, productName]);
 
+  /* ================= AUTO SCROLL ================= */
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, typing]);
 
+  /* ================= SEND MESSAGE ================= */
   async function sendMessage() {
     if (!input.trim()) return;
 
     const userText = input;
+
+    // stop any running voice
+    window.speechSynthesis.cancel();
+
+    // add user msg
+    setMessages(prev => [...prev, { text: userText, isUser: true }]);
     setInput("");
-    setMessages(m => [...m, { text: userText, isUser: true }]);
     setTyping(true);
 
     try {
       const res = await sendChatMessage(campaignId, userText);
 
       setTyping(false);
-      setIsTalking(true);
 
-      setMessages(m => [...m, { text: res.reply, isUser: false }]);
+      // add AI msg
+      setMessages(prev => [...prev, { text: res.reply, isUser: false }]);
 
-      speak(res.reply, () => setIsTalking(false));
-    } catch {
+      // 🔊 SPEAK AFTER MESSAGE IS SHOWN
+      setTimeout(() => {
+        setIsTalking(true);
+
+        speakWithZiraSweet(res.reply, () => {
+          setIsTalking(false); // stop avatar after voice
+        });
+      }, 400); // small natural pause
+
+    } catch (err) {
       setTyping(false);
       setIsTalking(false);
-      setMessages(m => [...m, { text: "⚠️ Error. Try again.", isUser: false }]);
+
+      setMessages(prev => [
+        ...prev,
+        { text: "⚠️ Something went wrong. Please try again.", isUser: false }
+      ]);
     }
   }
 
   return (
     <div className="chat-container">
 
-      {/* HEADER */}
+      {/* ================= HEADER ================= */}
       <div className="chat-header">
         <div>
           <strong>{companyName}</strong>
@@ -60,7 +81,7 @@ I can help you with price, features, and offers.`,
         <span className="verified">✔ Verified</span>
       </div>
 
-      {/* AVATAR */}
+      {/* ================= AVATAR ================= */}
       <div className="ai-avatar">
         <img
           src={isTalking ? "/AI-talking-avatar.gif" : "/ai_not_talk.png"}
@@ -68,22 +89,27 @@ I can help you with price, features, and offers.`,
         />
       </div>
 
-      {/* MESSAGES */}
+      {/* ================= MESSAGES ================= */}
       <div className="messages">
         {messages.map((m, i) => (
-          <div key={i} className={m.isUser ? "user-msg" : "ai-msg"}>
+          <div key={i} className={`message ${m.isUser ? "user-msg" : "ai-msg"}`}>
             {m.text}
           </div>
         ))}
-        {typing && <div className="typing">AI is typing...</div>}
+
+        {typing && <div className="typing">AI is typing…</div>}
+
         <div ref={endRef} />
       </div>
 
-      {/* INPUT */}
+      {/* ================= INPUT ================= */}
       <div className="input-bar">
         <input
           value={input}
-          onChange={e => setInput(e.target.value)}
+          onChange={e => {
+            setInput(e.target.value);
+            window.speechSynthesis.cancel(); // 🔇 stop voice while typing
+          }}
           placeholder="Ask about price, offers..."
           onKeyDown={e => e.key === "Enter" && sendMessage()}
         />
