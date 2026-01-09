@@ -66,19 +66,17 @@ After you add an ad, I’ll open automatically and help clear all your doubts ab
 
       {/* ================= HEADER (ONLY UPDATED PART) ================= */}
       <div className="chat-header adx-header">
-        <div>
-          {/* ADXREEL */}
-          <div className="adx-brand">
-            <img
-              src="/adxreel.png"
-              alt="ADXREEL Logo"
-              className="adx-logo"
-            />
-            <div>
-              <strong>ADXREEL</strong>
-              <div className="chat-subtitle">AI Assistant</div>
-            </div>
+             {/* ===== TOP AI BRAND BAR ===== */}
+      <div style={topBar}>
+        <div style={brandWrap}>
+          <img src="/adxreel.png" alt="Adxreel Logo" style={logoStyle} />
+          <div>
+            <div style={brandText}>Adxreel</div>
+            <div style={tagline}>AI Advertising Assistant</div>
           </div>
+        </div>
+      </div>
+
 
           {/* ADVERTISER */}
           <div style={{ marginTop: "6px" }}>
