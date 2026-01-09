@@ -3,7 +3,7 @@ import { sendChatMessage } from "../services/chatApi";
 import { speakWithZiraSweet } from "../utils/speak"; // 🔊 SWEET VOICE
 import "../styles/chat.css";
 
-export default function ChatBubble({ campaignId, companyName, productName }) {
+export default function ChatPage({ campaignId, companyName, productName }) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [typing, setTyping] = useState(false);
@@ -20,7 +20,7 @@ After you add an ad, I’ll open automatically and help clear all your doubts ab
         isUser: false
       }
     ]);
-  }, [companyName, productName]);
+  }, [productName]);
 
   /* ================= AUTO SCROLL ================= */
   useEffect(() => {
@@ -44,12 +44,10 @@ After you add an ad, I’ll open automatically and help clear all your doubts ab
       setTyping(false);
       setMessages(prev => [...prev, { text: res.reply, isUser: false }]);
 
-      setTimeout(() => {
-        setIsTalking(true);
-        speakWithZiraSweet(res.reply, () => {
-          setIsTalking(false);
-        });
-      }, 100);
+      setIsTalking(true);
+      speakWithZiraSweet(res.reply, () => {
+        setIsTalking(false);
+      });
 
     } catch (err) {
       setTyping(false);
@@ -64,22 +62,18 @@ After you add an ad, I’ll open automatically and help clear all your doubts ab
   return (
     <div className="chat-container">
 
-      {/* ================= HEADER (ONLY UPDATED PART) ================= */}
-      <div className="chat-header adx-header">
-             {/* ===== TOP AI BRAND BAR ===== */}
-      <div style={topBar}>
-        <div style={brandWrap}>
-          <img src="/adxreel.png" alt="Adxreel Logo" style={logoStyle} />
-          <div>
-            <div style={brandText}>Adxreel</div>
-            <div style={tagline}>AI Advertising Assistant</div>
+      {/* ================= HEADER ================= */}
+      <div className="chat-header">
+        <div className="header-left">
+          <div className="adx-brand">
+            <img src="/adxreel.png" alt="ADXREEL Logo" />
+            <div>
+              <div className="adx-title">ADXREEL</div>
+              <div className="adx-subtitle">AI Advertising Assistant</div>
+            </div>
           </div>
-        </div>
-      </div>
 
-
-          {/* ADVERTISER */}
-          <div style={{ marginTop: "6px" }}>
+          <div className="advertiser">
             <strong>{companyName}</strong>
             <div className="chat-subtitle">{productName}</div>
           </div>
@@ -121,6 +115,7 @@ After you add an ad, I’ll open automatically and help clear all your doubts ab
         />
         <button onClick={sendMessage}>Send</button>
       </div>
+
     </div>
   );
 }
