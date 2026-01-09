@@ -21,7 +21,7 @@ export function speak(text, onEnd) {
     voices.find(v => v.lang.startsWith("en")) ||
     voices[0];
 
-  // 🔥 SALES / SWEET TUNING (MAX SAFE)
+  //  SALES / SWEET TUNING (MAX SAFE)
   utterance.rate = 0.82;      // slower, calm
   utterance.pitch = 1.22;     // sweeter tone
   utterance.volume = 1;
