@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { sendChatMessage } from "../services/chatApi";
-import { speakWithZiraSweet } from "../utils/speak"; // 🔊 SWEET VOICE
+import { speak } from "../utils/speak";   // ✅ USE THIS
 import "../styles/chat.css";
 
 export default function ChatBubble({ campaignId, companyName, productName }) {
@@ -11,7 +11,7 @@ export default function ChatBubble({ campaignId, companyName, productName }) {
 
   const endRef = useRef(null);
 
-  /* ================= INIT MESSAGE ================= */
+  /* ===== INIT MESSAGE ===== */
   useEffect(() => {
     setMessages([
       {
@@ -22,21 +22,21 @@ I can help you with price, features, and current offers.`,
     ]);
   }, [companyName, productName]);
 
-  /* ================= AUTO SCROLL ================= */
+  /* ===== AUTO SCROLL ===== */
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, typing]);
 
-  /* ================= SEND MESSAGE ================= */
+  /* ===== SEND MESSAGE ===== */
   async function sendMessage() {
     if (!input.trim()) return;
 
     const userText = input;
 
-    // stop any running voice
+    // 🔇 stop any running voice
     window.speechSynthesis.cancel();
 
-    // add user msg
+    // user message
     setMessages(prev => [...prev, { text: userText, isUser: true }]);
     setInput("");
     setTyping(true);
@@ -46,17 +46,17 @@ I can help you with price, features, and current offers.`,
 
       setTyping(false);
 
-      // add AI msg
+      // AI message
       setMessages(prev => [...prev, { text: res.reply, isUser: false }]);
 
-      // 🔊 SPEAK AFTER MESSAGE IS SHOWN
+      // 🔊 speak AFTER message render
       setTimeout(() => {
         setIsTalking(true);
 
-        speakWithZiraSweet(res.reply, () => {
+        speak(res.reply, () => {
           setIsTalking(false); // stop avatar after voice
         });
-      }, 400); // small natural pause
+      }, 400);
 
     } catch (err) {
       setTyping(false);
@@ -72,7 +72,7 @@ I can help you with price, features, and current offers.`,
   return (
     <div className="chat-container">
 
-      {/* ================= HEADER ================= */}
+      {/* ===== HEADER ===== */}
       <div className="chat-header">
         <div>
           <strong>{companyName}</strong>
@@ -81,7 +81,7 @@ I can help you with price, features, and current offers.`,
         <span className="verified">✔ Verified</span>
       </div>
 
-      {/* ================= AVATAR ================= */}
+      {/* ===== AVATAR ===== */}
       <div className="ai-avatar">
         <img
           src={isTalking ? "/AI-talking-avatar.gif" : "/ai_not_talk.png"}
@@ -89,11 +89,16 @@ I can help you with price, features, and current offers.`,
         />
       </div>
 
-      {/* ================= MESSAGES ================= */}
+      {/* ===== MESSAGES ===== */}
       <div className="messages">
         {messages.map((m, i) => (
-          <div key={i} className={`message ${m.isUser ? "user-msg" : "ai-msg"}`}>
-            {m.text}
+          <div
+            key={i}
+            className={`message-row ${m.isUser ? "user" : "ai"}`}
+          >
+            <div className={m.isUser ? "user-msg" : "ai-msg"}>
+              {m.text}
+            </div>
           </div>
         ))}
 
@@ -102,13 +107,13 @@ I can help you with price, features, and current offers.`,
         <div ref={endRef} />
       </div>
 
-      {/* ================= INPUT ================= */}
+      {/* ===== INPUT ===== */}
       <div className="input-bar">
         <input
           value={input}
           onChange={e => {
             setInput(e.target.value);
-            window.speechSynthesis.cancel(); // 🔇 stop voice while typing
+            window.speechSynthesis.cancel(); // stop voice while typing
           }}
           placeholder="Ask about price, offers..."
           onKeyDown={e => e.key === "Enter" && sendMessage()}
